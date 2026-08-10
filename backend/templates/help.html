@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Help – Medi AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#050505] text-gray-200 h-screen overflow-hidden">
+<div class="flex h-full">
+  <aside class="w-20 lg:w-64 bg-[#0a0a0a] border-r border-white/5 p-4">
+    <h1 class="hidden lg:block text-xl font-bold mb-10 text-cyan-400">🩺 Medi AI</h1>
+    <button onclick="go('/dashboard')" class="w-full p-3 rounded-xl mb-2 hover:bg-white/5">Dashboard</button>
+    <button onclick="go('/history')" class="w-full p-3 rounded-xl mb-2 hover:bg-white/5">History</button>
+    <button onclick="go('/profile')" class="w-full p-3 rounded-xl mb-2 hover:bg-white/5">Profile</button>
+    <button onclick="go('/about')" class="w-full p-3 rounded-xl mb-2 hover:bg-white/5">About</button>
+    <button class="w-full p-3 rounded-xl mb-2 bg-cyan-500/10 text-cyan-400">Help</button>
+    <hr class="my-6 border-white/10">
+    <button onclick="logout()" class="w-full p-3 rounded-xl text-red-400 hover:bg-red-500/10">Logout</button>
+  </aside>
+  <main class="flex-1 p-8 overflow-y-auto">
+    <div class="max-w-5xl mx-auto space-y-8">
+      <div><h1 class="text-3xl font-bold mb-2">Help & Support</h1><p class="text-gray-400">Frequently asked questions and support information</p></div>
+      <div class="bg-[#121212] border border-white/10 rounded-3xl p-6">
+        <h2 class="text-xl font-bold mb-6">Frequently Asked Questions</h2>
+        <div class="space-y-5 text-gray-300">
+          <div><p class="font-semibold">Is Medi AI a medical diagnosis tool?</p><p class="text-sm text-gray-400 mt-1">No. Medi AI provides probabilistic insights only and does not replace a medical professional.</p></div>
+          <div><p class="font-semibold">How accurate are the predictions?</p><p class="text-sm text-gray-400 mt-1">Predictions are generated using trained machine learning models and may vary based on symptoms entered.</p></div>
+          <div><p class="font-semibold">Is my data stored securely?</p><p class="text-sm text-gray-400 mt-1">The application stores user data in local CSV files for this academic demonstration.</p></div>
+          <div><p class="font-semibold">Can I delete my prediction history?</p><p class="text-sm text-gray-400 mt-1">This feature is planned for future updates.</p></div>
+        </div>
+      </div>
+      <div class="bg-[#121212] border border-white/10 rounded-3xl p-6">
+        <h2 class="text-xl font-bold mb-4">Contact Support</h2>
+        <form method="POST" action="/contact" class="space-y-4">
+          <input type="text" name="name" placeholder="Your name" class="w-full bg-black border border-white/10 rounded-xl py-3 px-4" required />
+          <input type="email" name="email" placeholder="Email address" class="w-full bg-black border border-white/10 rounded-xl py-3 px-4" required />
+          <textarea name="message" placeholder="How can we help you?" rows="4" class="w-full bg-black border border-white/10 rounded-xl py-3 px-4" required></textarea>
+          <button type="submit" class="px-6 py-3 bg-cyan-500 text-black rounded-xl font-bold hover:opacity-90 transition">Submit Request</button>
+        </form>
+      </div>
+    </div>
+  </main>
+</div>
+<script>
+function go(p){window.location.href=p;}
+function logout(){fetch('/logout',{method:'POST'}).then(()=>location.href='/');}
+</script>
+</body>
+</html>
