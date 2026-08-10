@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.env
+.DS_Store
+*.log
+
+backend/user_profiles.csv
+backend/history_search.csv
+backend/saved_diseases.csv
+backend/contact_requests.csv
+backend/help.csv
+backend/static/uploads/*
+!backend/static/uploads/.gitkeep
