@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8" /><title>About – Medi AI</title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><script src="https://cdn.tailwindcss.com"></script></head>
+<body class="bg-[#050505] text-gray-200 h-screen overflow-hidden">
+<div class="flex h-full">
+<aside class="w-20 lg:w-64 bg-[#0a0a0a] border-r border-white/5 p-4">
+<h1 class="hidden lg:block text-xl font-bold mb-10 text-cyan-400">🩺 Medi AI</h1>
+<button onclick="go('/dashboard')" class="w-full p-3 rounded-xl mb-2 hover:bg-white/5">Dashboard</button>
+<button onclick="go('/history')" class="w-full p-3 rounded-xl mb-2 hover:bg-white/5">History</button>
+<button onclick="go('/profile')" class="w-full p-3 rounded-xl mb-2 hover:bg-white/5">Profile</button>
+<button class="w-full p-3 rounded-xl mb-2 bg-cyan-500/10 text-cyan-400">About</button>
+<button onclick="go('/help')" class="w-full p-3 rounded-xl mb-2 hover:bg-white/5">Help</button>
+<hr class="my-6 border-white/10"><button onclick="logout()" class="w-full p-3 rounded-xl text-red-400 hover:bg-red-500/10">Logout</button>
+</aside>
+<main class="flex-1 p-8 overflow-y-auto"><div class="max-w-5xl mx-auto space-y-8">
+<div><h1 class="text-3xl font-bold mb-2">About Medi AI</h1><p class="text-gray-400">Understanding the purpose and design of the Medi AI system</p></div>
+<div class="bg-[#121212] border border-white/10 rounded-3xl p-6"><p class="text-gray-300 leading-relaxed"><span class="text-cyan-400 font-semibold">Medi AI</span> is an intelligent disease prediction system designed to assist users in identifying possible common illnesses based on selected symptoms. The system leverages machine learning techniques to provide probability-based insights in a simple and user-friendly interface.</p></div>
+<div class="bg-[#121212] border border-white/10 rounded-3xl p-6"><h2 class="text-xl font-bold mb-4">How It Works</h2><ul class="space-y-2 text-gray-300 list-disc list-inside"><li>Users select the symptoms they are experiencing</li><li>The system analyzes inputs using a trained ML model</li><li>Top probable diseases are predicted with confidence scores</li><li>Predictions can be referenced through the application</li></ul></div>
+<div class="bg-[#121212] border border-white/10 rounded-3xl p-6"><h2 class="text-xl font-bold mb-4">Technology Stack</h2><ul class="space-y-2 text-gray-300 list-disc list-inside"><li>Python & Flask for backend services</li><li>Machine learning model for disease prediction</li><li>CSV-based structured datasets</li><li>Tailwind CSS for responsive UI design</li></ul></div>
+<div class="bg-[#121212] border border-red-500/30 rounded-3xl p-6"><h2 class="text-xl font-bold mb-3 text-red-400">Medical Disclaimer</h2><p class="text-gray-300 leading-relaxed">Medi AI is intended for educational and informational purposes only. It does not provide medical diagnosis or treatment. Always consult a qualified healthcare professional for medical advice.</p></div>
+</div></main></div>
+<script>function go(p){window.location.href=p;}function logout(){fetch('/logout',{method:'POST'}).then(()=>location.href='/');}</script>
+</body></html>
