@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8" /><title>Profile – Medi AI</title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><script src="https://cdn.tailwindcss.com"></script></head>
+<body class="bg-[#050505] text-gray-200 h-screen overflow-hidden">
+<div class="flex h-full">
+<aside class="w-20 lg:w-64 bg-[#0a0a0a] border-r border-white/5 p-4">
+<h1 class="hidden lg:block text-xl font-bold mb-10 text-cyan-400">🩺 Medi AI</h1>
+<button onclick="go('/dashboard')" class="w-full p-3 rounded-xl mb-2 hover:bg-white/5">Dashboard</button>
+<button onclick="go('/history')" class="w-full p-3 rounded-xl mb-2 hover:bg-white/5">History</button>
+<button class="w-full p-3 rounded-xl mb-2 bg-cyan-500/10 text-cyan-400">Profile</button>
+<button onclick="go('/about')" class="w-full p-3 rounded-xl mb-2 hover:bg-white/5">About</button>
+<button onclick="go('/help')" class="w-full p-3 rounded-xl mb-2 hover:bg-white/5">Help</button>
+<hr class="my-6 border-white/10"><button onclick="logout()" class="w-full p-3 rounded-xl text-red-400 hover:bg-red-500/10">Logout</button>
+</aside>
+<main class="flex-1 p-8 overflow-y-auto"><div class="max-w-6xl mx-auto space-y-8">
+<div class="flex items-center gap-6"><img src="{{ user.image or 'https://ui-avatars.com/api/?name=' ~ (user.name or user.username) }}" class="w-24 h-24 rounded-2xl border border-white/10" /><div><h1 class="text-3xl font-bold">{{ user.name or user.username or 'Unnamed User' }}</h1><p class="text-sm text-cyan-400 mt-1">Medi AI User</p></div></div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-[#121212] border border-white/10 rounded-3xl p-6"><p class="text-sm text-gray-400">Email</p><p class="mt-1">{{ user.email or 'Not provided' }}</p></div>
+<div class="bg-[#121212] border border-white/10 rounded-3xl p-6"><p class="text-sm text-gray-400">Phone</p><p class="mt-1">{{ user.phone or 'Not provided' }}</p></div>
+<div class="bg-[#121212] border border-white/10 rounded-3xl p-6"><p class="text-sm text-gray-400">Location</p><p class="mt-1">{{ user.location or 'Unknown' }}</p></div>
+</div>
+<div class="bg-[#121212] border border-white/10 rounded-3xl p-6"><h2 class="text-xl font-bold mb-4">Recent Predictions</h2>{% if history %}<div class="space-y-3">{% for h in history %}<div class="flex justify-between items-center bg-black/40 rounded-xl p-4"><div><p class="font-semibold text-cyan-400">{{ h.predicted_disease }}</p><p class="text-sm text-gray-400">{{ h.symptoms_entered }}</p></div><span class="text-green-400 font-bold">{{ h.confidence }}%</span></div>{% endfor %}</div>{% else %}<p class="text-gray-400">No prediction history yet.</p>{% endif %}</div>
+<div class="bg-[#121212] border border-white/10 rounded-3xl p-6"><h2 class="text-xl font-bold mb-4">Saved Notes</h2>{% if saved_diseases %}<div class="grid grid-cols-1 md:grid-cols-2 gap-4">{% for d in saved_diseases %}<div class="bg-black/40 rounded-xl p-4"><div class="flex justify-between"><h3 class="font-semibold">{{ d.disease }}</h3><span class="text-orange-400 text-sm">{{ d.match_percentage }}%</span></div><p class="text-sm text-gray-400 mt-2">{{ d.symptoms.replace(';', ', ') }}</p></div>{% endfor %}</div>{% else %}<p class="text-gray-400">No saved data.</p>{% endif %}</div>
+</div></main></div>
+<script>function go(p){window.location.href=p;}function logout(){fetch('/logout',{method:'POST'}).then(()=>location.href='/');}</script>
+</body></html>
