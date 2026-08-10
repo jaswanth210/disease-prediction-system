@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>History – Medi AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#050505] text-gray-200 h-screen overflow-hidden">
+<div class="flex h-full">
+  <aside class="w-20 lg:w-64 bg-[#0a0a0a] border-r border-white/5 p-4">
+    <h1 class="hidden lg:block text-xl font-bold mb-10 text-cyan-400">🩺 Medi AI</h1>
+    <button onclick="go('/dashboard')" class="w-full p-3 rounded-xl mb-2 hover:bg-white/5">Dashboard</button>
+    <button class="w-full p-3 rounded-xl mb-2 bg-cyan-500/10 text-cyan-400">History</button>
+    <button onclick="go('/profile')" class="w-full p-3 rounded-xl mb-2 hover:bg-white/5">Profile</button>
+    <button onclick="go('/about')" class="w-full p-3 rounded-xl mb-2 hover:bg-white/5">About</button>
+    <button onclick="go('/help')" class="w-full p-3 rounded-xl mb-2 hover:bg-white/5">Help</button>
+    <hr class="my-6 border-white/10">
+    <button onclick="logout()" class="w-full p-3 rounded-xl text-red-400 hover:bg-red-500/10">Logout</button>
+  </aside>
+  <main class="flex-1 p-8 overflow-y-auto">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex justify-between items-center mb-8"><h2 class="text-3xl font-bold">Prediction History</h2></div>
+      {% if history %}
+      <div class="space-y-4">
+        {% for h in history %}
+        <div class="bg-[#121212] border border-white/10 rounded-3xl p-6 flex justify-between items-center">
+          <div>
+            <h3 class="text-lg font-bold text-cyan-400">{{ h.predicted_disease }}</h3>
+            <p class="mt-2 text-sm text-gray-300"><span class="text-gray-400">Symptoms:</span> {{ h.symptoms_entered }}</p>
+            <p class="mt-1 text-xs text-gray-500">{{ h.searched_at }}</p>
+          </div>
+          <div class="text-right"><span class="text-xl font-bold text-green-400">{{ h.confidence }}%</span><p class="text-xs text-gray-500">confidence</p></div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="bg-[#121212] border border-white/10 rounded-3xl p-10 text-center"><p class="text-gray-400">No prediction history found.</p></div>
+      {% endif %}
+    </div>
+  </main>
+</div>
+<script>
+function go(p){window.location.href=p;}
+function logout(){fetch('/logout',{method:'POST'}).then(()=>location.href='/');}
+</script>
+</body>
+</html>
