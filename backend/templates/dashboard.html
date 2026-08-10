@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Medi AI – Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="bg-[#050505] text-gray-200 h-screen overflow-hidden">
+<div class="flex h-full">
+  <aside class="w-20 lg:w-64 bg-[#0a0a0a] border-r border-white/5 p-4">
+    <h1 class="hidden lg:block text-xl font-bold mb-10 text-cyan-400">🩺 Medi AI</h1>
+    <button class="w-full p-3 rounded-xl mb-2 bg-cyan-500/10 text-cyan-400">Dashboard</button>
+    <button onclick="go('/history')" class="w-full p-3 rounded-xl mb-2 hover:bg-white/5">History</button>
+    <button onclick="go('/profile')" class="w-full p-3 rounded-xl mb-2 hover:bg-white/5">Profile</button>
+    <button onclick="go('/about')" class="w-full p-3 rounded-xl mb-2 hover:bg-white/5">About</button>
+    <button onclick="go('/help')" class="w-full p-3 rounded-xl mb-2 hover:bg-white/5">Help</button>
+    <hr class="my-6 border-white/10">
+    <button onclick="logout()" class="w-full p-3 rounded-xl text-red-400 hover:bg-red-500/10">Logout</button>
+  </aside>
+
+  <main class="flex-1 p-8 overflow-y-auto">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex justify-between items-center mb-8">
+        <h2 class="text-3xl font-bold">Diagnosis Engine</h2>
+        <div class="relative">
+          <img src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff"
+            class="w-10 h-10 rounded-full cursor-pointer border border-white/10"
+            onclick="toggleProfileMenu(event)" />
+          <div id="profileMenu" class="hidden absolute right-0 mt-3 w-48 bg-[#121212] border border-white/10 rounded-xl shadow-lg z-50">
+            <button onclick="go('/profile')" class="w-full text-left px-4 py-3 hover:bg-white/5">👤 Profile</button>
+            <button onclick="go('/settings')" class="w-full text-left px-4 py-3 hover:bg-white/5">⚙️ Settings</button>
+            <button onclick="go('/help')" class="w-full text-left px-4 py-3 hover:bg-white/5">❓ Help</button>
+            <button onclick="logout()" class="w-full text-left px-4 py-3 text-red-400 hover:bg-red-500/10">🚪 Logout</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-[#121212] rounded-3xl border border-white/10 p-8">
+        <div id="inputSection">
+          <input id="searchInput" oninput="filterSymptoms()" placeholder="Type symptoms (minimum 3)..."
+            class="w-full bg-black border border-white/10 rounded-xl py-4 px-4 mb-4" />
+          <div id="suggestions" class="flex flex-wrap gap-2 mb-4"></div>
+          <div id="selected" class="flex flex-wrap gap-2 mb-6"></div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <input id="ageInput" type="number" placeholder="Age" class="bg-black border border-white/10 rounded-xl py-3 px-4" />
+            <select id="genderInput" class="bg-black border border-white/10 rounded-xl py-3 px-4">
+              <option value="0">Female</option><option value="1">Male</option>
+            </select>
+            <select id="smokerInput" class="bg-black border border-white/10 rounded-xl py-3 px-4">
+              <option value="0">Non-Smoker</option><option value="1">Smoker</option>
+            </select>
+          </div>
+
+          <button onclick="runPrediction()" id="predictBtn" class="w-full py-4 bg-cyan-500 text-black rounded-xl font-bold">
+            RUN ML PREDICTOR
+          </button>
+          <p class="text-xs text-gray-400 mt-4 text-center">This system provides probabilistic insights only. Not a medical diagnosis.</p>
+        </div>
+
+        <div id="resultsSection" class="hidden mt-8">
+          <h3 class="text-xl font-bold mb-4">Prediction Results</h3>
+          <div id="resultsList"></div>
+          <canvas id="chart" class="mt-6"></canvas>
+        </div>
+      </div>
+
+      <div class="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="bg-[#121212] p-6 rounded-3xl border border-white/10">
+          <h3 class="text-xl font-bold mb-4">Recent Predictions</h3>
+          <ul class="space-y-3 text-sm text-gray-400">
+            <li>🕒 Viral Fever – <span class="text-cyan-400">54%</span></li>
+            <li>🕒 Migraine – <span class="text-cyan-400">42%</span></li>
+            <li>🕒 Allergy – <span class="text-cyan-400">38%</span></li>
+          </ul>
+          <button onclick="go('/history')" class="mt-4 text-sm px-4 py-2 bg-white/10 rounded-xl">View History →</button>
+        </div>
+        <div class="bg-[#121212] p-6 rounded-3xl border border-white/10">
+          <h3 class="text-xl font-bold mb-4">How It Works</h3>
+          <p class="text-sm text-gray-400 mb-2">1️⃣ Select symptoms</p>
+          <p class="text-sm text-gray-400 mb-2">2️⃣ ML model analyzes patterns</p>
+          <p class="text-sm text-gray-400">3️⃣ Top probable diseases shown</p>
+        </div>
+        <div class="bg-[#0f172a] p-6 rounded-3xl border border-white/10">
+          <h3 class="text-xl font-bold mb-4 text-cyan-400">⚠️ Health Guidance</h3>
+          <ul class="list-disc ml-5 text-sm text-gray-300 space-y-2">
+            <li>Not a replacement for a doctor</li>
+            <li>Seek medical help if symptoms persist</li>
+            <li>Predictions are ML-based estimations</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+let allSymptoms = [], selectedSymptoms = [], chart;
+function go(p){ window.location.href=p; }
+function logout(){ fetch('/logout',{method:'POST'}).then(()=>location.href='/'); }
+function toggleProfileMenu(e){ e.stopPropagation(); document.getElementById('profileMenu').classList.toggle('hidden'); }
+document.addEventListener('click',()=>document.getElementById('profileMenu').classList.add('hidden'));
+
+fetch('/symptoms').then(r=>r.json()).then(d=>{
+  if (d.symptoms) allSymptoms=d.symptoms.sort();
+});
+
+function filterSymptoms(){
+  suggestions.innerHTML='';
+  const query=searchInput.value.toLowerCase();
+  allSymptoms.filter(s=>s.toLowerCase().includes(query)&&!selectedSymptoms.includes(s))
+    .slice(0,8).forEach(s=>{
+      const b=document.createElement('button');
+      b.className='px-4 py-2 bg-cyan-500/10 text-cyan-400 rounded-xl';
+      b.innerText=s.replace(/_/g,' ');
+      b.onclick=()=>{selectedSymptoms.push(s);renderSelected();};
+      suggestions.appendChild(b);
+    });
+}
+
+function renderSelected(){
+  selected.innerHTML='';
+  selectedSymptoms.forEach(s=>{
+    const sp=document.createElement('span');
+    sp.className='px-4 py-2 bg-white/5 rounded-xl cursor-pointer';
+    sp.innerText=s.replace(/_/g,' ')+' ✕';
+    sp.onclick=()=>{selectedSymptoms=selectedSymptoms.filter(x=>x!==s);renderSelected();};
+    selected.appendChild(sp);
+  });
+}
+
+async function runPrediction(){
+  if(selectedSymptoms.length<3)return alert('Select at least 3 symptoms');
+  const response=await fetch('/predict',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({symptoms:selectedSymptoms})});
+  const d=await response.json();
+  if(!response.ok)return alert(d.error||'Prediction failed');
+  inputSection.classList.add('hidden');
+  resultsSection.classList.remove('hidden');
+  resultsList.innerHTML='';
+  const labels=[],scores=[];
+  d.results.forEach(r=>{
+    labels.push(r.name);scores.push(r.score);
+    resultsList.innerHTML+=`<p class="mb-2">${r.name} - <span class="text-cyan-400">${r.score}%</span></p>`;
+  });
+  if(chart)chart.destroy();
+  chart=new Chart(document.getElementById('chart'),{type:'bar',data:{labels,datasets:[{data:scores,backgroundColor:'#06b6d4'}]},options:{scales:{y:{beginAtZero:true,max:100}}}});
+}
+</script>
+</body>
+</html>
