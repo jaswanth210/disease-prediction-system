@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><title>Settings – MediAI</title><script src="https://cdn.tailwindcss.com"></script></head>
+<body class="bg-[#050505] text-gray-200 min-h-screen">
+<div class="flex h-screen">
+<aside class="w-16 lg:w-64 bg-[#0b0b0b] border-r border-white/10 flex flex-col justify-between"><div><div class="h-16 flex items-center justify-center border-b border-white/10"><span class="text-purple-500 font-bold text-lg">M</span></div><nav class="mt-6 space-y-2 px-2"><a href="/dashboard" class="flex items-center gap-3 p-2 rounded-lg text-gray-400 hover:bg-[#151515]">📊 <span class="hidden lg:inline">Dashboard</span></a><a href="/history" class="flex items-center gap-3 p-2 rounded-lg text-gray-400 hover:bg-[#151515]">🕒 <span class="hidden lg:inline">History</span></a><a href="/profile" class="flex items-center gap-3 p-2 rounded-lg text-gray-400 hover:bg-[#151515]">👤 <span class="hidden lg:inline">Profile</span></a><a href="/help" class="flex items-center gap-3 p-2 rounded-lg text-gray-400 hover:bg-[#151515]">❓ <span class="hidden lg:inline">Help</span></a></nav></div><div class="p-2"><button onclick="logout()" class="flex items-center gap-3 p-2 rounded-lg text-red-400 hover:bg-red-500/10">🚪 <span class="hidden lg:inline">Logout</span></button></div></aside>
+<main class="flex-1 p-8 overflow-y-auto"><h1 class="text-3xl font-bold mb-8">Settings</h1><form method="POST" action="/settings/update" enctype="multipart/form-data" class="bg-[#0d0d0d] rounded-2xl p-6 space-y-6 max-w-xl">
+<div class="flex items-center gap-5"><img src="{{ user.image or 'https://ui-avatars.com/api/?name=' ~ (user.name or user.username) }}" class="w-28 h-28 rounded-2xl border border-white/10 object-cover"><input type="file" name="image" accept="image/*" class="text-sm text-gray-300"></div>
+<input type="text" name="name" value="{{ user.name }}" placeholder="Full Name" class="w-full bg-[#0b0b0b] p-3 rounded-lg text-sm">
+<input type="email" name="email" value="{{ user.email }}" placeholder="Email Address" class="w-full bg-[#0b0b0b] p-3 rounded-lg text-sm">
+<input type="text" name="phone" value="{{ user.phone }}" placeholder="Phone Number" class="w-full bg-[#0b0b0b] p-3 rounded-lg text-sm">
+<input type="text" name="location" value="{{ user.location }}" placeholder="Location" class="w-full bg-[#0b0b0b] p-3 rounded-lg text-sm">
+<button type="submit" class="bg-purple-600 px-6 py-2 rounded-lg hover:bg-purple-700 transition">Save Changes</button>
+</form></main></div>
+<script>function logout(){fetch('/logout',{method:'POST'}).then(()=>location.href='/');}</script>
+</body></html>
